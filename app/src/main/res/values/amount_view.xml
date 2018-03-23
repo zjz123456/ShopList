@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AmountView">
+        <attr name="btnWidth" format="integer|reference"/>
+        <attr name="tvWidth" format="integer|reference"/>
+        <attr name="tvTextSize" format="integer|reference"/>
+        <attr name="btnTextSize" format="integer|reference"/>
+    </declare-styleable>
+</resources>
