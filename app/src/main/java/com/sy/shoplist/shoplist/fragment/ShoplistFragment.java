@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sy.shoplist.shoplist.control.MyApplication.count;
 import static com.sy.shoplist.shoplist.jsons.JSDate.JSONFILENAME;
 
 /**
@@ -73,7 +74,7 @@ public class ShoplistFragment extends Fragment implements SwipeRefreshLayout.OnR
             JSONObject jsonObject = new JSONObject(str);
 //            Toast.makeText(getActivity(),"count:"+ss,Toast.LENGTH_LONG).show();
             JSONArray jsonArray = jsonObject.getJSONArray("books");
-            if (jsonArray.length() <= firstload) {
+            if (jsonArray.length() < firstload) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ShopInfo shop = new ShopInfo();
                     JSONObject json = jsonArray.getJSONObject(i);
@@ -122,9 +123,7 @@ public class ShoplistFragment extends Fragment implements SwipeRefreshLayout.OnR
                         nextList.add(shop);
                     }
                 }
-
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -170,21 +169,29 @@ public class ShoplistFragment extends Fragment implements SwipeRefreshLayout.OnR
      */
     private void onLoad() {
         try {
-            //模拟耗时操作
-            if (adapter.getCount() < total_index){
-                Thread.sleep(1000);
-            }else {
-                Toast.makeText(getActivity(),"已加载完",Toast.LENGTH_SHORT).show();
+            if (adapter == null) {
+                adapter = new ShoplistAdapter(getActivity(), firstList);
+                listView.setAdapter(adapter);
+            } else {
+                if (count < total_index) {
+                    //模拟耗时操作
+                    if (adapter.getCount() < total_index) {
+                        Thread.sleep(1000);
+                    } else {
+                        Toast.makeText(getActivity(), "已加载完", Toast.LENGTH_SHORT).show();
+                    }
+                    if (adapter.getCount() < nextList.size()) {
+                        adapter.updateView(nextList);
+                        count = total_index;
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "已加载完", Toast.LENGTH_SHORT).show();
+                }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (adapter == null) {
-            adapter = new ShoplistAdapter(getActivity(), firstList);
-            listView.setAdapter(adapter);
-        } else  {
-            adapter.updateView(nextList);
-        }
+
         loadComplete();//刷新结束
     }
 
