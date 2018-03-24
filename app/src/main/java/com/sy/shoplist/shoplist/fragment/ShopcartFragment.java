@@ -20,10 +20,11 @@ import java.util.List;
 
 public class ShopcartFragment extends Fragment {
     private List<ShopInfo> list = new ArrayList<ShopInfo>();//购物车商品集合
-    private ShopDao dao;
-    private ListView listView;
-    private ShopCartAdapter adapter;
-    private Button submit;
+    private ShopDao dao;//数据库管理类
+    private ListView listView;//listview控件
+    private ShopCartAdapter adapter;//适配器
+    private Button submit;//提交
+    private Button delete;//删除
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +32,7 @@ public class ShopcartFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_shopcart, null, false);
         listView = (ListView) view.findViewById(R.id.list_cart);
         submit = (Button) view.findViewById(R.id.submit);
+        delete = (Button) view.findViewById(R.id.delete);
         info();
         return view;
     }
@@ -38,12 +40,12 @@ public class ShopcartFragment extends Fragment {
     private void info() {
         dao = new ShopDao(getActivity());
         list = MyApplication.dao.getShops();
-        if (list.size() != 0) {
-            adapter = new ShopCartAdapter(getActivity(), list);
+//        if (list.size() != 0) {
+            adapter = new ShopCartAdapter(getActivity(), list,this);
             listView.setAdapter(adapter);
-        } else {
-//            Toast.makeText(getActivity(),"当前没数据",Toast.LENGTH_SHORT).show();
-        }
+//        } else {
+////            Toast.makeText(getActivity(),"当前没数据",Toast.LENGTH_SHORT).show();
+//        }
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,5 +57,20 @@ public class ShopcartFragment extends Fragment {
                 Toast.makeText(getActivity(), "结算共需:"+sum+"元", Toast.LENGTH_SHORT).show();
             }
         });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                delect_by_ids(adapter.get_ids());
+            }
+        });
+    }
+    //重新定义适配器
+    public void updateAdapter(){
+        info();
+    }
+    //在数据库中删除选中的商品
+    public void delect_by_ids(List<String> ids){
+        MyApplication.dao.delete_ids(ids);
+        updateAdapter();
     }
 }

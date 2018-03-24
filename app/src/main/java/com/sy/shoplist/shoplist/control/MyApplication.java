@@ -21,6 +21,7 @@ public class MyApplication extends Application {
     public static SQLiteDatabase writeDataBase;
     public static Context context;
     public static ShopDao dao;
+    public static int count = 0;
 
     @Override
     public void onCreate() {

@@ -180,7 +180,7 @@ public class ShopDao {
      *
      * @param names
      */
-    public void deldepartments(String names) {
+    public void delete_by_name(String names) {
 
         String sql = "delete from " + TABLE_NAME + " where " + COLUMN_NAME + " = '" + names + "'";
         try {
@@ -191,7 +191,6 @@ public class ShopDao {
         } finally {
             closeclose();
         }
-
     }
 
     public void delete_by_id(int id) {
@@ -205,7 +204,20 @@ public class ShopDao {
         } finally {
             closeclose();
         }
+    }
 
+    public void delete_ids(List<String> ids) {
+        try {
+            for (int i = 0; i < ids.size(); i++) {
+                String sql = "delete from " + TABLE_NAME + " where " + COLUMN_ID + " = '" + ids.get(i) + "'";
+                db = mdbhelper.getWritableDatabase();
+                db.execSQL(sql);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeclose();
+        }
     }
 
     public void delete_by_img(String img) {
