@@ -83,7 +83,7 @@ public class ShoplistAdapter extends BaseAdapter {
             public void onClick(View view) {
                 MyApplication.dao.add_shop(info);
 //                dao.add_shop(info);
-//                Toast.makeText(context,"info"+info,Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"添加成功",Toast.LENGTH_SHORT).show();
 //                dao.closeclose();
             }
         });
